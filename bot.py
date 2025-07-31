@@ -4,6 +4,10 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 
+#? static imports
+from static.json_functions import save_json
+from static.variables import data
+
 # Load environment variables from .env file
 load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN")
