@@ -25,10 +25,9 @@ async def on_ready():
 async def ping(ctx):
     await ctx.send('Pong!')
 
-@bot.tree.command(name="hello", description="Say hello!")
-async def hello(interaction: discord.Interaction):
-    await interaction.response.send_message("Hello, world!")
-
+@bot.tree.command(name="woniw", description="im winow")
+async def woniw(interaction: discord.Interaction):
+    await interaction.response.send_message("Im winow")
 
 if __name__ == "__main__":
     if TOKEN is None:

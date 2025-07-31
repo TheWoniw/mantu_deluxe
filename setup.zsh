@@ -1,6 +1,5 @@
 #!/bin/zsh
 
-# Default venv folder name if none provided
 VENV_DIR=${1:-venv}
 
 echo "Creating virtual environment in ./${VENV_DIR} ..."
@@ -20,4 +19,5 @@ pip install --upgrade pip
 pip install discord.py python-dotenv
 
 echo "Setup complete! Virtual environment '$VENV_DIR' is active."
-echo "Run 'deactivate' to exit the virtual environment."
+echo "Running bot..."
+python bot.py
