@@ -4,11 +4,13 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 
-#? static imports
-from static.json_functions import save_json
-from static.variables import data
+from data_storage.json_functions import save_json
 
-# Load environment variables from .env file
+#? static imports\
+from static.variables import data
+from static.variables import RED
+from static.variables import GREEN
+
 load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN")
 
@@ -24,14 +26,50 @@ async def on_ready():
     except Exception as e:
         print(f"Failed to sync commands: {e}")
 
+#! run data
+print(f"{RED}{data}")
 
-@bot.command()
-async def ping(ctx):
-    await ctx.send('Pong!')
+@bot.tree.command(name="add_me")
+async def add_me(interaction: discord.Interaction):
+    user_id = str(interaction.user.id)
 
-@bot.tree.command(name="woniw", description="im winow")
-async def woniw(interaction: discord.Interaction):
-    await interaction.response.send_message("Im winow")
+    print("")
+    print("|----- Log -----")
+    print(f"{GREEN} USER ID: {user_id}")
+    print("")
+
+    if user_id in data['saved_users']:
+        await interaction.response.send_message("you are already added")
+    elif user_id not in data['saved_users']:
+        #! adding user
+        data["saved_users"][user_id] = {
+            "money": 0,
+
+            "ingredients":{
+                "flour": 0,
+                "water": 0,
+                "yogurt": 0,
+                "meat": 0,
+            },
+            
+            'equipment': {
+                "oven": "regular oven",
+            },
+
+            "skill": {
+                "dough handling xp": 0,
+                "dough handling": 1
+            }
+        }
+        from static.variables import data_path
+        save_json(data_path, data)
+
+        print("")
+        print("|----- Log -----")
+        print(f"user:{user_id} has been added to the json database ")
+        print("")
+
+        await interaction.response.send_message(f"Welcome {interaction.user.mention}")
 
 if __name__ == "__main__":
     if TOKEN is None:
