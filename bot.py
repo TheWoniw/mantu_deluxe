@@ -34,7 +34,7 @@ async def add_me(interaction: discord.Interaction):
     user_id = str(interaction.user.id)
 
     print("")
-    print("|----- Log -----")
+    print("|----- Log -----|")
     print(f"{GREEN} USER ID: {user_id}")
     print("")
 
@@ -71,6 +71,45 @@ async def add_me(interaction: discord.Interaction):
 
         await interaction.response.send_message(f"Welcome {interaction.user.mention}")
 
+@bot.tree.command(name="resources")
+async def resources(interaction: discord.Interaction):
+    user_id = str(interaction.user.id)
+
+    print("")
+    print("|----- Log -----|")
+    print(f"{GREEN} USER ID: {user_id}")
+    print("")
+
+    if user_id in data['saved_users']:
+        #? resource variables
+        #data['saved_users'][user_id]['ingredients']['']
+        balance = data['saved_users'][user_id]['money']
+        flour = data['saved_users'][user_id]['ingredients']['flour']
+        water = data['saved_users'][user_id]['ingredients']['water']
+        yogurt = data['saved_users'][user_id]['ingredients']['yogurt']
+        meat = data['saved_users'][user_id]['ingredients']['meat']
+
+
+        resource_embed = discord.Embed(
+            title="resources",
+            description=f"balance: {balance} \n flour: {flour} \n water: {water} \n yogurt: {yogurt} \n meat: {meat}",
+            color=discord.Color.green()
+        )
+
+        await interaction.response.send_message(embed=resource_embed)
+    elif user_id not in data['saved_users']:
+        await interaction.response.send_message("your not added")
+
+
+@bot.tree.command(name="skill_level")
+async def skill_level():
+    user_id = str(interaction.user.id)
+
+    print("")
+    print("|----- Log -----|")
+    print(f"{GREEN} USER ID: {user_id}")
+    print("")
+    
 if __name__ == "__main__":
     if TOKEN is None:
         print("Error: DISCORD_TOKEN not found in environment variables.")

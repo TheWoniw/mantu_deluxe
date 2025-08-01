@@ -1,7 +1,7 @@
 from data_storage.json_functions import load_json
 
 
-data_path = "/home/woniw/Desktop/mantu_deluxe/data_storage/data.json"
+data_path = "/home/woniw/Desktop/winow_bot/data_storage/data.json"
 
 data = load_json(data_path)
 
