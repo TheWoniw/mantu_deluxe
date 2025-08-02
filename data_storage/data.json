@@ -1,7 +1,7 @@
 {
     "saved_users": {
         "1136474974924845147": {
-            "money": 0,
+            "money": 143,
             "ingredients": {
                 "flour": 0,
                 "water": 0,
@@ -14,6 +14,9 @@
             "skill": {
                 "dough handling xp": 0,
                 "dough handling": 1
+            },
+            "extra": {
+                "beg_counter": 5
             }
         }
     }
