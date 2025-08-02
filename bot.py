@@ -38,8 +38,14 @@ async def add_me(interaction: discord.Interaction):
     print(f"{GREEN} USER ID: {user_id}")
     print("")
 
+    already_added_embed = discord.Embed(
+        title="‼️Already Added‼️",
+        description="Your already added, stop making woniw write more code for error handling",
+        color=discord.Color.red()
+    )
     if user_id in data['saved_users']:
-        await interaction.response.send_message("you are already added")
+        await interaction.response.send_message(embed=already_added_embed)
+
     elif user_id not in data['saved_users']:
         #! adding user
         data["saved_users"][user_id] = {
@@ -91,25 +97,41 @@ async def resources(interaction: discord.Interaction):
 
 
         resource_embed = discord.Embed(
-            title="resources",
-            description=f"balance: {balance} \n flour: {flour} \n water: {water} \n yogurt: {yogurt} \n meat: {meat}",
-            color=discord.Color.green()
+            title="**RESOURCES**",
+            description=f"Balance: **{balance}** \n Flour: {flour} \n Water: {water} \n Yogurt: {yogurt} \n Meat: {meat}",
+            color=discord.Color.green(),  
+        ) 
+
+        resource_embed.set_image(url="https://cdn-icons-png.flaticon.com/512/4241/4241664.png")
+        resource_embed.set_author(name="winow resource facility")
+
+        not_added_embed = discord.Embed(
+            title="Not found",
+            description="It seems that your not in the saved users json file \n try running /add_me",
+            color=discord.Color.red()
         )
 
         await interaction.response.send_message(embed=resource_embed)
-    elif user_id not in data['saved_users']:
-        await interaction.response.send_message("your not added")
 
+    elif user_id not in data['saved_users']:
+        print(f"{RED}USER IS NOT ADDED")
+        await interaction.response.send_message(embed=not_added_embed)
 
 @bot.tree.command(name="skill_level")
-async def skill_level():
+async def skill_level(interaction: discord.Interaction):
     user_id = str(interaction.user.id)
 
     print("")
     print("|----- Log -----|")
     print(f"{GREEN} USER ID: {user_id}")
     print("")
-    
+
+
+    if user_id in data['saved_users']:
+        pass
+    elif user_id not in data["saved_users"]:
+        pass
+
 if __name__ == "__main__":
     if TOKEN is None:
         print("Error: DISCORD_TOKEN not found in environment variables.")
