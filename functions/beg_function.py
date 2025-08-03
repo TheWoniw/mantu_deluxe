@@ -1,5 +1,4 @@
 import random
-
 def beg():
     low = 15
     high = 32

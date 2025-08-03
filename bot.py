@@ -15,7 +15,7 @@ load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN")
 
 intents = discord.Intents.default()
-bot = commands.Bot(command_prefix="!", intents=intents)
+bot = commands.Bot(command_prefix="$", intents=intents)
 
 @bot.event
 async def on_ready():
@@ -57,18 +57,19 @@ async def add_me(interaction: discord.Interaction):
                 "yogurt": 0,
                 "meat": 0,
             },
+
+            "materials": {
+                "rocks": 0,
+                "sticks": 0,
+            },
             
-            'equipment': {
-                "oven": "regular oven",
-            },
-
-            "skill": {
-                "dough handling xp": 0,
-                "dough handling": 1
-            },
-
             "extra": {
                 "beg_counter": 0
+            },
+
+            "shop": {
+                "title": f"{interaction.user.mention}",
+
             }
         }
         from static.variables import data_path
@@ -109,16 +110,16 @@ async def resources(interaction: discord.Interaction):
         resource_embed.set_image(url="https://cdn-icons-png.flaticon.com/512/4241/4241664.png")
         resource_embed.set_author(name="winow resource facility")
 
-        not_added_embed = discord.Embed(
-            title="Not found",
-            description="It seems that your not in the saved users json file \n try running /add_me",
-            color=discord.Color.red()
-        )
-
         await interaction.response.send_message(embed=resource_embed)
 
     elif user_id not in data['saved_users']:
         print(f"{RED}USER IS NOT ADDED")
+        not_added_embed = discord.Embed(
+            title="Not found",
+            description="It seems that your not in the saved users json file",
+            color=discord.Color.red()
+        )
+        not_added_embed.set_footer(text="try running /add_me")
         await interaction.response.send_message(embed=not_added_embed)
 
 @bot.tree.command(name="beg", description="beg to earn some cash (you can only use this command 5 times)")
@@ -131,20 +132,23 @@ async def beg(interaction: discord.Interaction):
     print(f"{GREEN} USER ID: {user_id}")
     print("")
 
-    not_added_embed = discord.Embed(
-        title="Not found",
-        description="It seems that your not in the saved users json file \n try running /add_me",
-        color=discord.Color.red()
-    )
 
     max_beg_reached_embed = discord.Embed(
         title="Stop begging",
-        description="No way your that desperate for money \n get your money up not your funny up and **stop begging**",
+        description="No way ur that desperate for money \n get your money up not your funny up and **stop begging**",
         color=discord.Color.blurple()
     )
 
     if user_id not in data['saved_users']:
+        not_added_embed = discord.Embed(
+            title="Not found",
+            description="It seems that your not in the saved users json file",
+            color=discord.Color.red()
+        )
+        not_added_embed.set_footer(text="try running /add_me")
+        
         await interaction.response.send_message(embed=not_added_embed)
+
     elif user_id in data['saved_users']:
 
         #? LOG
@@ -177,6 +181,32 @@ async def beg(interaction: discord.Interaction):
 
         elif data['saved_users'][user_id]['extra']['beg_counter'] <= 5:
             await interaction.response.send_message(embed=max_beg_reached_embed)
+
+@bot.tree.command(name='user_shop', description='check what others have in their shops') 
+async def ingredient_shop_shop(interaction: discord.Interaction, target: discord.User):
+    target_id = str(target.id)
+    user_id = str(interaction.user.id)
+
+    not_added_embed = discord.Embed(
+        title="Not found",
+        description="It seems that your not in the saved users json file",
+        color=discord.Color.red()
+    )
+
+    not_added_embed.set_footer(text="try running /add_me")
+
+    user_added_embed = discord.Embed(
+        title="Not found",
+        description="User does NOT have a shop",
+        color=discord.Color.red()
+    )
+
+
+    if user_id not in data['saved_users']:
+        await interaction.response.send_message(embed=not_added_embed)
+    elif user in data['saved_users']:
+        if target_id not in data['saved_users']:
+            await interaction.response.send_message(embed=user_added_embed)
 
 if __name__ == "__main__":
     if TOKEN is None:
